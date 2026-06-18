@@ -38,16 +38,18 @@ export default function TextBox() {
 
   return (
     isVisible && (
-      <motion.div
-        className="text-box"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={isCloseRequest ? "closed" : "open"}
-        variants={variants}
-        transition={{ duration: 0.2 }}
-        onAnimationComplete={handleAnimationComplete}
-      >
-        <p>{content}</p>
-      </motion.div>
+      <div className="text-box-shell">
+        <motion.div
+          className="text-box"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={isCloseRequest ? "closed" : "open"}
+          variants={variants}
+          transition={{ duration: 0.2 }}
+          onAnimationComplete={handleAnimationComplete}
+        >
+          <p>{content}</p>
+        </motion.div>
+      </div>
     )
   );
 }

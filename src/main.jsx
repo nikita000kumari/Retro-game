@@ -9,6 +9,12 @@ import initGame from "../ReactComponents/initGame.js";
 import "./index.css";
 
 const ui = document.getElementById("ui");
+const GAME_WIDTH = 1920;
+const GAME_HEIGHT = 1080;
+
+document.documentElement.style.setProperty("--width", GAME_WIDTH);
+document.documentElement.style.setProperty("--height", GAME_HEIGHT);
+document.documentElement.style.setProperty("--scale", "1");
 
 new ResizeObserver(() => {
   document.documentElement.style.setProperty(
