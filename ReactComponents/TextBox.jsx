@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { motion } from "framer-motion";
-import { isTextBoxVisibleAtom, textBoxContentAtom } from "../store";
-import "./textbox.css";
+import { isTextBoxVisibleAtom, textBoxContentAtom } from "./store.js";
+import "./TextBox.css";
 
 const variants = {
   open: { opacity: 1, scale: 1 },
