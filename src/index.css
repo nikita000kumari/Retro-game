@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "gameboy";
+  src: url("/gameboy.ttf") format("truetype");
+}
+
+:root {
+  font-family: "gameboy", monospace;
+  color: #f8f1d4;
+  background: #120f0a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#ui,
+#game {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, rgba(255, 203, 112, 0.18), transparent 32%),
+    linear-gradient(180deg, #33261b 0%, #120f0a 100%);
+}
+
+#game {
+  display: block;
+}

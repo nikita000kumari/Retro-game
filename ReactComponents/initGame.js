@@ -6,7 +6,7 @@ export default function initGame() {
   const k = initKaplay();
 
   k.loadSprite("background", "./background.png");
-  k.loadSprite("characters", "./characters.png", {
+  k.loadSprite("characters", "./character.png", {
     sliceY: 2,
     sliceX: 8,
     anims: {

@@ -4,7 +4,7 @@ import './index.css'
 import App from './ReactUI.jsx'
 import initGame from '../ReactComponents/initGame.js';
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('ui')).render(
   <StrictMode>
     <App />
   </StrictMode>,
