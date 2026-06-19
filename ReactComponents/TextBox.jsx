@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { motion } from "framer-motion";
-import { isTextBoxVisibleAtom, textBoxContentAtom } from "./store.js";
+import {
+  gamePhaseAtom,
+  isTextBoxVisibleAtom,
+  textBoxContentAtom,
+} from "./store.js";
 import "./TextBox.css";
 
 const variants = {
@@ -11,6 +15,7 @@ const variants = {
 
 export default function TextBox() {
   const [isVisible, setIsVisible] = useAtom(isTextBoxVisibleAtom);
+  const gamePhase = useAtomValue(gamePhaseAtom);
   const [isCloseRequest, setIsCloseRequest] = useState(false);
   const content = useAtomValue(textBoxContentAtom);
 
@@ -37,6 +42,7 @@ export default function TextBox() {
   }, [isVisible, setIsVisible]);
 
   return (
+    gamePhase === "playing" &&
     isVisible && (
       <div className="text-box-shell">
         <motion.div
