@@ -1,4 +1,4 @@
-# Retro Console
+# Retro Game
 
 A small pixel-art adventure game built with React and Kaplay.  
 You explore the map, collect glowing relics, talk to the villager, and finish a short quest loop with a proper start and end screen.
