@@ -4,12 +4,14 @@ import TextBox from "../ReactComponents/TextBox.jsx";
 import {
   endSummaryAtom,
   gamePhaseAtom,
+  interactionHintAtom,
   relicCountAtom,
 } from "../ReactComponents/store.js";
 
 export default function ReactUI() {
   const gamePhase = useAtomValue(gamePhaseAtom);
   const endSummary = useAtomValue(endSummaryAtom);
+  const interactionHint = useAtomValue(interactionHintAtom);
   const relicCount = useAtomValue(relicCountAtom);
   const setGamePhase = useSetAtom(gamePhaseAtom);
 
@@ -17,6 +19,11 @@ export default function ReactUI() {
     const keyHandler = (event) => {
       if (gamePhase === "start" && event.code === "Enter") {
         setGamePhase("playing");
+        return;
+      }
+
+      if (gamePhase === "ended" && event.code === "KeyR") {
+        window.location.reload();
       }
     };
 
@@ -39,7 +46,8 @@ export default function ReactUI() {
               villager to complete the quest.
             </p>
             <p className="phase-copy">
-              Use the arrow keys to move. Press <strong>Enter</strong> to start.
+              Use the arrow keys to move, <strong>E</strong> to talk, and press{" "}
+              <strong>Enter</strong> to start.
             </p>
           </div>
         </div>
@@ -51,7 +59,9 @@ export default function ReactUI() {
             <p className="phase-kicker">Quest Complete</p>
             <h1 className="phase-title">Adventure Finished</h1>
             <p className="phase-copy">{endSummary}</p>
-            <p className="phase-copy">Refresh the page if you want to play again.</p>
+            <p className="phase-copy">
+              Press <strong>R</strong> if you want to play again.
+            </p>
           </div>
         </div>
       )}
@@ -60,7 +70,11 @@ export default function ReactUI() {
         <p className="hud-title">Explorer Log</p>
         <p className="hud-copy">Relics found: {relicCount} / 3</p>
         <p className="hud-copy">Walk into glowing markers to collect them.</p>
+        <p className="hud-copy">Press E near the villager to interact.</p>
       </div>
+      {gamePhase === "playing" && interactionHint && (
+        <div className="hint-pill">{interactionHint}</div>
+      )}
       <TextBox />
     </>
   );

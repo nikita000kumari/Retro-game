@@ -2,6 +2,7 @@ import initKaplay from "./kaplayCtx";
 import {
   endSummaryAtom,
   gamePhaseAtom,
+  interactionHintAtom,
   isTextBoxVisibleAtom,
   relicCountAtom,
   store,
@@ -11,7 +12,9 @@ import {
 export default function initGame() {
   const DIAGONAL_FACTOR = 1 / Math.sqrt(2);
   const TOTAL_RELICS = 3;
+  const TALK_RANGE = 140;
   const k = initKaplay();
+  const PLAYER_START = k.center();
 
   k.loadSprite("background", "./background.png");
   k.loadSprite("characters", "./character.png", {
@@ -80,7 +83,7 @@ export default function initGame() {
     k.area(),
     k.body(),
     k.anchor("center"),
-    k.pos(k.center()),
+    k.pos(PLAYER_START),
     k.scale(8),
     "player",
     {
@@ -93,6 +96,7 @@ export default function initGame() {
     if (store.get(gamePhaseAtom) !== "playing") {
       player.direction.x = 0;
       player.direction.y = 0;
+      store.set(interactionHintAtom, "");
       return;
     }
 
@@ -145,6 +149,9 @@ export default function initGame() {
     }
 
     player.move(player.direction.scale(player.speed));
+
+    const nearNpc = player.pos.dist(npc.pos) <= TALK_RANGE;
+    store.set(interactionHintAtom, nearNpc ? "Press E to talk" : "");
   });
 
   const npc = k.add([
@@ -156,9 +163,19 @@ export default function initGame() {
     k.pos(1480, 500),
   ]);
 
-  npc.onCollide("player", (player) => {
+  const getFacing = () => {
+    const current = player.getCurAnim()?.name ?? "down-idle";
+    if (current.includes("left")) return "left";
+    if (current.includes("right")) return "right";
+    if (current.includes("up")) return "up";
+    return "down";
+  };
+
+  const talkToNpc = () => {
     if (store.get(gamePhaseAtom) !== "playing") return;
     const relicCount = store.get(relicCountAtom);
+
+    if (player.pos.dist(npc.pos) > TALK_RANGE) return;
 
     if (relicCount === TOTAL_RELICS) {
       store.set(
@@ -170,7 +187,9 @@ export default function initGame() {
       return;
     }
 
-    if (player.direction.eq(k.vec2(0, -1))) {
+    const facing = getFacing();
+
+    if (facing === "up") {
       store.set(
         textBoxContentAtom,
         "Beautiful day, isn't it? I heard there are 3 relics nearby."
@@ -178,12 +197,12 @@ export default function initGame() {
       npc.play("npc-down");
     }
 
-    if (player.direction.eq(k.vec2(0, 1))) {
+    if (facing === "down") {
       npc.play("npc-up");
       store.set(textBoxContentAtom, "Those rocks are heavy! Keep searching.");
     }
 
-    if (player.direction.eq(k.vec2(1, 0))) {
+    if (facing === "right") {
       npc.play("npc-left");
       store.set(
         textBoxContentAtom,
@@ -191,11 +210,13 @@ export default function initGame() {
       );
     }
 
-    if (player.direction.eq(k.vec2(-1, 0))) {
+    if (facing === "left") {
       store.set(textBoxContentAtom, "Is the water too cold? The relics glow gold.");
       npc.play("npc-right");
     }
 
     store.set(isTextBoxVisibleAtom, true);
-  });
+  };
+
+  k.onKeyPress("e", talkToNpc);
 }
